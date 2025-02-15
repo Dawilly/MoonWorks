@@ -7,16 +7,29 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+
 using SDLBool = SDL3.SDL.SDLBool;
 
 namespace MoonWorks.Graphics;
 
+/// <summary>
+/// Specifies the primative topology of a graphics pipeline.
+/// </summary>
 public enum PrimitiveType
 {
+	/// <summary>Indicates a series of seperate triangles.</summary>
 	TriangleList = 0,
+
+	/// <summary>Indicates a series of connected triangles.</summary>
 	TriangleStrip = 1,
+
+	/// <summary>Indicates a series of seperate lines.</summary>
 	LineList = 2,
+
+	/// <summary>Indicates a series of connected lines.</summary>
 	LineStrip = 3,
+
+	/// <summary>Indicates a series of seperate points.</summary>
 	PointList = 4,
 }
 
@@ -797,11 +810,27 @@ public struct TextureCreateInfo
 	public uint Props;
 }
 
+/// <summary>
+/// Parameter data used to create a <see cref="Buffer"/> instance.
+/// Reflects SDL_GPUBufferCreateInfo from SDL3.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct BufferCreateInfo
 {
+	/// <summary>
+	/// The intended use of the buffer.
+	/// </summary>
 	public BufferUsageFlags Usage;
+
+	/// <summary>
+	/// The size of the buffer in bytes.
+	/// </summary>
 	public uint Size;
+
+	/// <summary>
+	/// A property identification for extensions.
+	/// Should be 0 if no extensions are needed.
+	/// </summary>
 	public uint Props;
 }
 
@@ -1144,16 +1173,36 @@ public struct DepthStencilTargetInfo
 	}
 }
 
+/// <summary>
+/// Paramater data used for blit operations and/or commands.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct BlitInfo
 {
+	/// <summary>The source region for the blit.</summary>
 	public BlitRegion Source;
+
+	/// <summary>The destination region for the blit.</summary>
 	public BlitRegion Destination;
+
+	/// <summary>Value that indicates what is done with the content of the destination prior to blit.</summary>
 	public LoadOp LoadOp;
+
+	/// <summary>
+	/// The color used when clearing the destination region prior to the blit.
+	/// Ignored if <see cref="BlitInfo.LoadOp"/> is set NOT to <see cref="LoadOp.Clear"/>.
+	/// </summary>
 	public FColor ClearColor;
+
+	/// <summary>Value that indicates the flip mode of the source region.</summary>
 	public FlipMode FlipMode;
+
+	/// <summary>Value that indicates the filter mode to use when blitting.</summary>
 	public Filter Filter;
+
+	/// <summary>Indicates if the destination texture is to be cycled when already bound.</summary>
 	public SDLBool Cycle;
+
 	public byte Padding1;
 	public byte Padding2;
 	public byte Padding3;
@@ -1191,23 +1240,46 @@ public struct StorageBufferReadWriteBinding
 	}
 }
 
+/// <summary>
+/// Parameter data related to the binding texture in a compute pass.
+/// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public struct StorageTextureReadWriteBinding
 {
+	/// <summary>Pointer to the texture to bind.</summary>
 	public IntPtr Texture;
+
+	/// <summary>The mip level index to bind.</summary>
 	public uint MipLevel;
+
+	/// <summary>The layer index to bind.</summary>
 	public uint Layer;
+
+	/// <summary>Indicates if the texture should be cycled when it is already bound.</summary>
 	public SDLBool Cycle;
+
 	public byte Padding1;
 	public byte Padding2;
 	public byte Padding3;
 
+	/// <summary>
+	/// Create a new instance of the <see cref="StorageTextureReadWriteBinding"/> struct.
+	/// </summary>
+	/// <param name="texture">The texture to bind.</param>
+	/// <param name="cycle">Indicates if the texture should be cycled when it is already bound.</param>
 	public StorageTextureReadWriteBinding(Texture texture, bool cycle = false)
 	{
 		Texture = texture;
 		Cycle = cycle;
 	}
 
+	/// <summary>
+	/// Create a new instance of the <see cref="StorageTextureReadWriteBinding"/> struct.
+	/// </summary>
+	/// <param name="texture">The texture to bind.</param>
+	/// <param name="mipLevel">The mip level index to bind.</param>
+	/// <param name="layer">The layer index to bind.</param>
+	/// <param name="cycle">Indicates if the texture should be cycled when it is already bound.</param>
 	public StorageTextureReadWriteBinding(Texture texture, uint mipLevel, uint layer, bool cycle = false)
 	{
 		Texture = texture;
